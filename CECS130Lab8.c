@@ -95,11 +95,12 @@ int main()
         srand(time(0));
         int randNum;
         FILE *pWrite;
+        FILE *pRead;
 
         do
         {
                 //Code for phone menu
-                printf("Phone Menu:\n1. Add Contact\n2. Delete Contact\n3. Show Phone Book\n4. Alphabetize Phone Book by First Name\n5. Search Phone Book\n6. Randomly Select Contact\n7. Delete All Contacts\n8. Store All Contacts Into File\n9. Retrieve All Contacts From File\n10. Exit Phone Book");
+                printf("Phone Menu:\n1. Add Contact\n2. Delete Contact\n3. Show Phone Book\n4. Alphabetize Phone Book by First Name\n5. Search Phone Book\n6. Randomly Select Contact\n7. Delete All Contacts\n8. Store All Contacts Into File\n9. Retrieve All Contacts From File & Store Into Phone Book\n10. Exit Phone Book");
                 printf("\nPlease choose an option: ");
                 scanf("%d",&iPhoneOp);
                 switch(iPhoneOp)
@@ -180,18 +181,21 @@ int main()
                                                                                 	printf("\nContacts written to text file\n\n");
                                                                                 	break;
                                                                                 	case 9:
-                                                                                		pWrite = fopen("phonecontacts.txt","r");
-                                                                                		if(pWrite == NULL)
+                                                                                		pRead = fopen("phonecontacts.txt","r");
+                                                                                		if(pRead == NULL)
 																						{
 																							printf("File not opened");
 																							return 0;
                                                                                 		}
                                                                                 		else
 																						{
-																							fread(aContacts2, sizeof(stPhoneBook),1,pWrite);
-																							printf("Name: %s %s\nPhone Number: %lli\n\n",aContacts2->scFirstName,aContacts2->scLastName,aContacts2->lliPhoneNum);
-																							fclose(pWrite);
-                                                                                		}//Errors: Need to get all contacts read from file. Need to get contacts that are read from file to become new aContacts; aContacts=aContacts2 partially breaks translation from file to code.
+																							while( !feof(pRead))
+																							{
+																							fread(aContacts2, sizeof(stPhoneBook),1,pRead);
+																							printf("Name: %s %s\nPhone Number: %lli\n\n",aContacts2->scFirstName,aContacts2->scLastName,aContacts2->lliPhoneNum);	
+																							}
+                                                                                		}//Errors: All contacts show, but last contact shows up twice. Need to get contacts that are read from file to become new aContacts; aContacts=aContacts2 doesn't seem to work.
+                                                                                		fclose(pRead);
                                                                                 		break;
                                                                                 		case 10:
                                                                                     		exiting();
